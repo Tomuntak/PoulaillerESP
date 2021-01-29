@@ -19,7 +19,7 @@ void setup() {
 void loop() {
   
   BTN_open_close();
-
+  connect_wifi();
 
 }
 
