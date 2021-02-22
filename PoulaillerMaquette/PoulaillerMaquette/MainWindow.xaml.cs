@@ -53,5 +53,13 @@ namespace PoulaillerMaquette
             uc_info my_info = new uc_info();
             window_container.Children.Add(my_info);
         }
+
+        private void window_container_Loaded(object sender, RoutedEventArgs e)
+        {
+            window_container.Children.Clear();
+            uc_home my_home = new uc_home();
+            window_container.Children.Add(my_home);
+        }
     }
+
 }
