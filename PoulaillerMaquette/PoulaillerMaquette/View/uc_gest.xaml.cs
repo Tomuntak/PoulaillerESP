@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PoulaillerMaquette.View
 {
     /// <summary>
-    /// Logique d'interaction pour uc_home
+    /// Logique d'interaction pour uc_gest
     /// </summary>
-    public partial class uc_home : UserControl
+    public partial class uc_gest : UserControl
     {
-        public uc_home()
+        public uc_gest()
         {
             InitializeComponent();
         }

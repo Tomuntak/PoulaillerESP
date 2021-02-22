@@ -22,7 +22,7 @@ namespace PoulaillerMaquette.View
     {
         public uc_config()
         {
-            
+            InitializeComponent();
         }
     }
 }

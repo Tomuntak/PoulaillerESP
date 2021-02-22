@@ -17,3 +17,7 @@ C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMa
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\PoulaillerMaquette.pdb
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_config.g.cs
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_config.baml
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_info.g.cs
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_info.baml
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_gest.g.cs
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_gest.baml

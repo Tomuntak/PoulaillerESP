@@ -55,6 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\uc_gest.xaml.cs">
+      <DependentUpon>uc_gest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\uc_info.xaml.cs">
+      <DependentUpon>uc_info.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\uc_home.xaml.cs">
       <DependentUpon>uc_home.xaml</DependentUpon>
     </Compile>
@@ -73,6 +79,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\uc_gest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\uc_info.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\uc_home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

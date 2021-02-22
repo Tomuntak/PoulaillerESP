@@ -33,21 +33,25 @@ namespace PoulaillerMaquette
             window_container.Children.Add(my_home);
         }
 
-        private void BTN_gest_Click(object sender, RoutedEventArgs e)
+        private void BTN_cfg_Click(object sender, RoutedEventArgs e)
         {
             window_container.Children.Clear();
             uc_config my_config = new uc_config();
             window_container.Children.Add(my_config);
         }
 
-        private void BTN_cfg_Click(object sender, RoutedEventArgs e)
+        private void BTN_gest_Click(object sender, RoutedEventArgs e)
         {
-
+            window_container.Children.Clear();
+            uc_gest my_gest = new uc_gest();
+            window_container.Children.Add(my_gest);
         }
 
         private void BTN_info_Click(object sender, RoutedEventArgs e)
         {
-
+            window_container.Children.Clear();
+            uc_info my_info = new uc_info();
+            window_container.Children.Add(my_info);
         }
     }
 }
