@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WifiClient.h>
+#include <Stepper.h>
 
 #define WIFI_SSID       "linksysTablettes"
 #define WIFI_PASSWORD   "zx2axdt8fmkve3nj"
