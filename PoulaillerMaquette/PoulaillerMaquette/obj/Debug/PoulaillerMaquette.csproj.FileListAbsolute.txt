@@ -21,3 +21,6 @@ C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMa
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_info.baml
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_gest.g.cs
 C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\View\uc_gest.baml
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\bin\Debug\M2Mqtt.Net.dll
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\bin\Debug\M2Mqtt.Net.pdb
+C:\Users\lavancar\Documents\GitHub\PoulaillerESP\PoulaillerMaquette\PoulaillerMaquette\obj\Debug\PoulaillerMaquette.csproj.CopyComplete
