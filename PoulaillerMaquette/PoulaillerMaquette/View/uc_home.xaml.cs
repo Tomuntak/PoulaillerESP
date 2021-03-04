@@ -40,11 +40,9 @@ namespace PoulaillerMaquette.View
 
         }
 
+       /**************************************************** publish sur MQTT ******************************************************************************/
         private void BTN_changeporte_Click(object sender, RoutedEventArgs e)
         {
- 
-            
-
             client.Publish("etat/porte", Encoding.UTF8.GetBytes("porte2"));
         }
 
@@ -53,26 +51,30 @@ namespace PoulaillerMaquette.View
         void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             // access data bytes throug e.Message
-            
-            //ligne a lock en cas de debug **************************************************************************************************
-            string PorteRead = "Topic : " + e.Topic + "Message :" + Encoding.UTF8.GetString(e.Message);
+            string MsgGet = Encoding.UTF8.GetString(e.Message);
+
+            //******************************************ligne a lock en cas de debug ********************************************************
+            string PorteRead = "Topic : " + e.Topic + " Message : " + MsgGet;
             //*******************************************************************************************************************************
 
-            if(PorteRead == "ouvert")
+            if(e.Topic == "etat/porte")
             {
-                TB_sub.Text = "ouvert";
+                if (MsgGet == "Ouvert")
+                {
+                    TB_sub.Text = "ouvert";
+                }
+                else if (MsgGet == "ferme")
+                {
+                    TB_sub.Text = "fermée";
+                }
             }
-            else if(PorteRead == "ferme")
-            {
-                TB_sub.Text = "fermée";
-            }
+            
 
         }
 
         void client_MqttMsgSubscribed(object sender, MqttMsgSubscribedEventArgs e)
         {
             
-
         }
 
     }
