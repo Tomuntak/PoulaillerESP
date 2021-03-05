@@ -25,8 +25,9 @@ namespace PoulaillerMaquette.View
     public partial class uc_home : UserControl
     {
         MqttClient client;
+        char lastMessage;
 
-     
+
 
         public uc_home()
         {
@@ -36,16 +37,16 @@ namespace PoulaillerMaquette.View
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
 
             client.Connect(Guid.NewGuid().ToString());
-            client.Subscribe(new string[] { "etat/porte" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-
+            client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            lastMessage = 'c';
         }
 
        /**************************************************** publish sur MQTT ******************************************************************************/
         private void BTN_changeporte_Click(object sender, RoutedEventArgs e)
         {
-            client.Publish("etat/porte", Encoding.UTF8.GetBytes("porte2"));
+            EnvoiPorte();
         }
-
+    
 
         //***********************************  fonction de traitement des messages reçus *******************************************************************//
         void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
@@ -57,7 +58,7 @@ namespace PoulaillerMaquette.View
             string PorteRead = "Topic : " + e.Topic + " Message : " + MsgGet;
             //*******************************************************************************************************************************
 
-            if(e.Topic == "etat/porte")
+           /* if(e.Topic == "etat/porte")
             {
                 if (MsgGet == "Ouvert")
                 {
@@ -67,14 +68,31 @@ namespace PoulaillerMaquette.View
                 {
                     TB_sub.Text = "fermée";
                 }
-            }
-            
-
+            }*/
         }
 
         void client_MqttMsgSubscribed(object sender, MqttMsgSubscribedEventArgs e)
         {
             
+        }
+
+        void EnvoiPorte()
+        {
+
+
+            if (lastMessage == 'c')
+            {
+                client.Publish("etat/porte", Encoding.UTF8.GetBytes("o"));
+                lastMessage = 'o';
+                TB_sub.Text = "ouvert";
+            }
+            else
+            {
+                client.Publish("etat/porte", Encoding.UTF8.GetBytes("c"));
+                lastMessage = 'c';
+                TB_sub.Text = "fermee";
+            }
+
         }
 
     }
