@@ -7,6 +7,41 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="ajouter" Height="20" Width="180" Margin="10,10,10,15" x:Name="BTN_ConfPoule" Grid.Row="4" Grid.Column="1" Click="BTN_ConfPoule_Click"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="poids" Margin="10"/>
+            <TextBox Grid.Row="1" Text="nom" Margin="10"/>
+            <TextBox Grid.Row="3" Text="date arrivée" Margin="10"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="date sortie" Margin="10"/>
+
+        </Grid>
+
+        <Button Grid.Column="0" Grid.Row="0" Name="BTN_DelPoule" Content="supprimer poule ..." Height="20" Width="180" Margin="110,102,110,103" Click="BTN_DelPoule_Click"/>
+        <Button Grid.Column="0" Grid.Row="0" x:Name="BTN_AddPoule" Content="Ajouter poule ..." Height="20" Width="180" Margin="110,173,110,32" Click="BTN_AddPoule_Click"/>
+        <Button Grid.Column="0" Grid.Row="0" x:Name="BTN_AltPoule" Content="Modifier poule ..." Height="20" Width="180" Margin="110,25,110,180" Click="BTN_AltPoule_Click"/>
+
     </Grid>
 </UserControl>

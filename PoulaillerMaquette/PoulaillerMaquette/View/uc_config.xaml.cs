@@ -24,5 +24,25 @@ namespace PoulaillerMaquette.View
         {
             InitializeComponent();
         }
+
+        private void BTN_AddPoule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BTN_ConfPoule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BTN_DelPoule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BTN_AltPoule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

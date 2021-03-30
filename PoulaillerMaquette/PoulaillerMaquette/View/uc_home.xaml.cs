@@ -25,75 +25,97 @@ namespace PoulaillerMaquette.View
     public partial class uc_home : UserControl
     {
         MqttClient client;
-        char lastMessage;
+        string lastMessage;
+        string MsgGet;
 
 
 
         public uc_home()
         {
             InitializeComponent();
-            client = new MqttClient(IPAddress.Parse("172.31.253.11"));
+            /*client = new MqttClient(IPAddress.Parse("172.31.253.11")); //172.31.253.6 - 172.31.253.11 --> premiere = nathan / 2e = val
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
 
             client.Connect(Guid.NewGuid().ToString());
             client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            lastMessage = 'c';
+            client.Subscribe(new string[] { "s" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });*/
+            lastMessage = MsgGet;
         }
-
-       /**************************************************** publish sur MQTT ******************************************************************************/
+          
+         
+        /**************************************************** publish sur MQTT ******************************************************************************/
         private void BTN_changeporte_Click(object sender, RoutedEventArgs e)
         {
             EnvoiPorte();
         }
-    
 
-        //***********************************  fonction de traitement des messages reçus *******************************************************************//
+
+        //***********************************  fonction de traitement des messages /!\ reçus /!\  *******************************************************************//
         void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             // access data bytes throug e.Message
-            string MsgGet = Encoding.UTF8.GetString(e.Message);
+            MsgGet = Encoding.UTF8.GetString(e.Message);
 
-            //******************************************ligne a lock en cas de debug ********************************************************
-            string PorteRead = "Topic : " + e.Topic + " Message : " + MsgGet;
+            //****************************************** ligne a lock en cas de debug ********************************************************
+            //string PorteRead = "Topic : " + e.Topic + " Message : " + MsgGet;
             //*******************************************************************************************************************************
 
-           /* if(e.Topic == "etat/porte")
+            if(e.Topic == "s")
             {
-                if (MsgGet == "Ouvert")
+                TB_Debug.Text = "system ok, topic : " + e.Topic;
+                if (MsgGet == "d")/********************************* work on progress **************************************************/
                 {
-                    TB_sub.Text = "ouvert";
+                    BTN_changeporte.IsEnabled = true; /*********************** si le code renvoie un d (done), le bouton est clickable, sinon non *************************************/
+
                 }
-                else if (MsgGet == "ferme")
+                else
                 {
-                    TB_sub.Text = "fermée";
+                    BTN_changeporte.IsEnabled = true;
                 }
-            }*/
+            }
+            if(e.Topic == "d")
+            {
+                //CgtPorte(); /************************ si topic = d, alors l'état a changé et c'est pas moi, donc on check ***************************************/
+            }
         }
+
+
 
         void client_MqttMsgSubscribed(object sender, MqttMsgSubscribedEventArgs e)
         {
-            
+
         }
 
         void EnvoiPorte()
         {
-
-
-            if (lastMessage == 'c')
+            if (lastMessage == "c")
             {
-                client.Publish("etat/porte", Encoding.UTF8.GetBytes("o"));
-                lastMessage = 'o';
+                client.Publish("d", Encoding.UTF8.GetBytes("o"));
+                lastMessage = "o";
                 TB_sub.Text = "ouvert";
+                //Lbl_porte.Background = ;
             }
             else
             {
-                client.Publish("etat/porte", Encoding.UTF8.GetBytes("c"));
-                lastMessage = 'c';
+                client.Publish("d", Encoding.UTF8.GetBytes("c"));
+                lastMessage = "c";
                 TB_sub.Text = "fermee";
             }
-
         }
 
+        void CgtPorte() /******************* si d, alors on change interface et on attends le done **************************************/
+        {/*
+            if (lastMessage == "o")
+            {
+                TB_sub.Text = "ouvert";
+                Lbl_porte.Content = "ouvert";
+            }
+            else
+            {
+                TB_sub.Text = "fermee";
+                Lbl_porte.Content = "fermée";
+            }*/
+        }
     }
 }
