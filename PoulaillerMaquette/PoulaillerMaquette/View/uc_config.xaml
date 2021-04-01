@@ -31,7 +31,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="ajouter" Height="20" Width="180" Margin="10,10,10,15" x:Name="BTN_ConfPoule" Grid.Row="4" Grid.Column="1" Click="BTN_ConfPoule_Click"/>
+            <Button Content="confirmer" Height="20" Width="180" Margin="10,10,10,15" x:Name="BTN_ConfPoule" Grid.Row="4" Grid.Column="1" Click="BTN_ConfPoule_Click"/>
+            <Label Content="Nom :" HorizontalAlignment="Left" Name="LBL_nom" Margin="10,10,10,10" Grid.Column="0" Foreground="White"/>
+            <Label Content="Poids :" HorizontalAlignment="Left"  Grid.Column="1" Name="LBL_Poids" Margin="10,10,10,10" Foreground="White"/>
+            <Label Content="Date Arrivée :" HorizontalAlignment="Left" Name="LBL_Arriv" Margin="10,10,10,10" Grid.Row="2" Grid.Column="0" Foreground="White"/>
+            <Label Content="Date Sortie :" HorizontalAlignment="Left" Name="LBL_Sort" Margin="10,10,10,10" Grid.Row="2" Grid.Column="1" Foreground="White"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="poids" Margin="10"/>
             <TextBox Grid.Row="1" Text="nom" Margin="10"/>
             <TextBox Grid.Row="3" Text="date arrivée" Margin="10"/>
