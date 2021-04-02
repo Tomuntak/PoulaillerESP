@@ -24,9 +24,11 @@ namespace PoulaillerMaquette.View
     /// </summary>
     public partial class uc_home : UserControl
     {
+        public delegate void MyDelegate(string msg);
         MqttClient client;
         string MsgGet;
         string Topic;
+        private MyDelegate PassageInfo;
 
 
 
@@ -40,6 +42,7 @@ namespace PoulaillerMaquette.View
             client.Connect(Guid.NewGuid().ToString());
             client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "s" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            PassageInfo = new MyDelegate(this.MiseAJour);
         }
 
 
@@ -60,7 +63,7 @@ namespace PoulaillerMaquette.View
             //string PorteRead = "Topic : " + e.Topic + " Message : " + MsgGet;
             //*******************************************************************************************************************************
 
-
+            InterMessage();
         }
 
 
@@ -85,8 +88,20 @@ namespace PoulaillerMaquette.View
                 TB_sub.Text = "fermee";
             }
         }
+        
+        void InterMessage()
+        {
+            if(Topic == "s")
+            {
+                client.Publish("p", Encoding.UTF8.GetBytes("ça, ça marche"));
+                
+            }
+        }
 
-
+        void MiseAJour(string t)
+        {
+            TB_sub.Text = t;
+        }
 
     }
 }
