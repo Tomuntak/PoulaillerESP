@@ -132,6 +132,8 @@ namespace PoulaillerMaquette.View
         void sendChienDeGarde()
         {
             TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "en attente ..."; }));
+            Timerfin = Timer + 30;
+            TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "timer : " + Timer.ToString() + " / timer fin : " + Timerfin.ToString(); }));
 
             if (MsgGet == "ouvrir")
             {
@@ -143,8 +145,8 @@ namespace PoulaillerMaquette.View
             }
             else
             {
-                Timerfin = Timer+30;
-                if (Timer == Timerfin)
+
+                if (Timer != Timerfin)
                 {
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "attention, l'information n'à pas été reçue !"; }));
                 }
@@ -153,7 +155,7 @@ namespace PoulaillerMaquette.View
 
         void chiendegarde2()
         {
-            if(lastmsg == "d")
+            if(lastmsg == "do" || lastmsg == "dc")
             {
                 TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "topic : " + Topic + " / message : " + lastmsg; }));
             }
