@@ -18,7 +18,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Name="Lbl_porte" Content="OUVERT" Height="80" Width="250" Margin="75,28,75,117" Background="#FF73D82C" BorderBrush="#FF70CD54" VerticalContentAlignment="Center" HorizontalContentAlignment="center"/>
+        <Label Grid.Row="0" Grid.Column="0" Name="Lbl_porte" Content="OUVERT" Height="80" Width="250" Margin="75,28,75,117" Background="#FFE1E1E7" VerticalContentAlignment="Center" HorizontalContentAlignment="center"/>
         <Button Grid.Row="0" Grid.Column="0" Name="BTN_changeporte" Content="OUVRIR/FERMER" Height="20" Width="180" Margin="110,132,110,73" Click="BTN_changeporte_Click"/>
         <TextBox Grid.Row="1" Grid.Column="1" Name="TB_sub" IsReadOnly="True" Width="300" Height="150"></TextBox>
         <TextBox Grid.Row="1" Grid.Column="0" Name="TB_Debug" IsReadOnly="True" Width="300" Height="150"></TextBox>
