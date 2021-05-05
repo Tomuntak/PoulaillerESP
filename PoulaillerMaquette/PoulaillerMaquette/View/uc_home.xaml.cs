@@ -33,7 +33,7 @@ namespace PoulaillerMaquette.View
         public uc_home()
         {
             InitializeComponent();
-            client = new MqttClient(IPAddress.Parse("192.168.1.43")); //172.31.253.6 - 172.31.253.11 --> premiere = nathan / 2e = val
+            client = new MqttClient(IPAddress.Parse("172.31.253.11")); //172.31.253.6 - 172.31.253.11 - 192.168.1.43 --> premiere = nathan / 2e = val / 3e = yvoire
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
 

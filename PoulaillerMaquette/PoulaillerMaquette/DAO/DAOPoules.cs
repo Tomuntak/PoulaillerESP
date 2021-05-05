@@ -19,16 +19,16 @@ namespace PoulaillerMaquette.DAO
         static async Task RunAsync()
         {
             // Update port # in the following line.
-            client.BaseAddress = new Uri("http://localhost:64195/");
+            client.BaseAddress = new Uri("http://localhost:64195/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        static async Task<Poules> GetPoules(string path)
+        static async Task<Poules> GetPoules()
         {
             Poules poule = null;
-            HttpResponseMessage response = await client.GetAsync(path);
+            HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
             if (response.IsSuccessStatusCode)
             {
                 poule = await response.Content.ReadAsAsync<Poules>();
@@ -45,6 +45,18 @@ namespace PoulaillerMaquette.DAO
             // return URI of the created resource.
             return response.Headers.Location;
         }
+
+        static async Task<Poules> UpdatePouleAsync(Poules poule)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"api/products/{poule.IDPoule}", poule);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            poule = await response.Content.ReadAsAsync<Poules>();
+            return poule;
+        }
+
     }
 
 
