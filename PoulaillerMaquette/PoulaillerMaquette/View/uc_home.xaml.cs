@@ -21,12 +21,11 @@ namespace PoulaillerMaquette.View
         public delegate void MyDelegate(string msg);
         MqttClient client;
         string lastmsg;
-        string MsgGet;
+        string etat;
         string Topic;
         private MyDelegate PassageInfo;
-        int Timer = DateTime.Now.Second;
-        int Timerfin;
-
+        private DispatcherTimer Timer;
+        int nbPoules, nbPoulesMax;
 
 
 
@@ -37,16 +36,18 @@ namespace PoulaillerMaquette.View
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            Timer = new DispatcherTimer();
+            Timer.Interval = TimeSpan.FromMilliseconds(30); //delay
+            Timer.Tick += timer_Tick;
+            Timer.Start(); 
 
             client.Connect(Guid.NewGuid().ToString());
             client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "s" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             PassageInfo = new MyDelegate(this.MiseAJour);
             lastmsg = "ro";
+            nbPoulesMax = 3;
+            nbPoules = 1;
 
         }
 
@@ -64,7 +65,6 @@ namespace PoulaillerMaquette.View
             // access data bytes throug e.Message
 
             lastmsg = Encoding.UTF8.GetString(e.Message);
-
             Topic = e.Topic;
 
             //****************************************** ligne a lock en cas de debug ********************************************************
@@ -77,7 +77,7 @@ namespace PoulaillerMaquette.View
             {
                 if (lastmsg == "rc")
                 {                                      //variable message reçu == "o" pour pouvoir la réutiliser 
-
+                    lastmsg = "ro";
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "FERMEE"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "fermeture ..."; }));
                     client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
@@ -86,13 +86,25 @@ namespace PoulaillerMaquette.View
                 }
                 else if(lastmsg == "ro")
                 {
-                    lastmsg = "c";
+                    lastmsg = "rc";
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "OUVERT"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ouverture ..."; }));
                     client.Publish("d", Encoding.UTF8.GetBytes("c"));
 
                 }
-                chiendegarde2();
+            }
+            else if(Topic == "p")
+            {
+                if(lastmsg == "e") 
+                {
+                    nbPoules = nbPoules + 1;
+                }
+
+                else
+                {
+                    nbPoules = nbPoules - 1;
+                }
+                Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
             }
 
 
@@ -108,15 +120,15 @@ namespace PoulaillerMaquette.View
 
         void EnvoiPorte()
         {
-            if (lastmsg == "rc")
+            if (lastmsg == "ro")
             {
                 client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
-                MsgGet = "ouvrir";
+                etat = "ouvrir";
             }
             else
             {
                 client.Publish("d", Encoding.UTF8.GetBytes("c"));
-                MsgGet = "fermer";
+                etat = "fermer";
             }
             sendChienDeGarde();
         }
@@ -129,35 +141,24 @@ namespace PoulaillerMaquette.View
         }
 
 
-        void sendChienDeGarde()
+        void sendChienDeGarde() //attention, la syntaxe ne peux pas marcher et je dois revoir mon algo de cette partie, à revoir plus tard !
         {
             TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "en attente ..."; }));
-            Timerfin = Timer + 30;
-            TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "timer : " + Timer.ToString() + " / timer fin : " + Timerfin.ToString(); }));
+            Timer.Start();
 
-            if (MsgGet == "ouvrir")
+
+            if (etat == "ouvrir" || etat == "fermer")
             {
-                lastmsg = "ro";
+                lastmsg = "r";
             }
-            else if(MsgGet == "fermer")
-            {
-                lastmsg = "rc";
-            }
+
             else
             {
 
-                if (Timer != Timerfin)
-                {
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "attention, l'information n'à pas été reçue !"; }));
-                }
-            }
-        }
-
-        void chiendegarde2()
-        {
-            if(lastmsg == "do" || lastmsg == "dc")
-            {
-                TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "topic : " + Topic + " / message : " + lastmsg; }));
+                //    if (Timer == Timer.Interval)
+                //    {
+                TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "attention, l'information n'à pas été reçue !"; }));
+                //    }
             }
         }
 

@@ -36,6 +36,21 @@ namespace PoulaillerMaquette.DAO
             return poule;
         }
 
+        /******************************************************************************************** passage par le broker seulement ****************************************************************************************/
+
+        static async Task<Poules> GetPoulesIn()
+        {
+            Poules poule = null;
+            HttpResponseMessage response = await client.GetAsync("RecupPouleInside");
+            if (response.IsSuccessStatusCode)
+            {
+                poule = await response.Content.ReadAsAsync<Poules>();
+            }
+            return poule;
+        }
+
+        /*********************************************************************************************************************************************************************************************************************/
+
         static async Task<Uri> CreatePoule(Poules poule)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync(
