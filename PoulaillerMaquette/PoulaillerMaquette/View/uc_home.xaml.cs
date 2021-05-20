@@ -97,17 +97,26 @@ namespace PoulaillerMaquette.View
                 if (lastmsg == "e")
                 {
                     nbPoules = nbPoules + 1;
+                    if (nbPoules == nbPoulesMax + 1)
+                    {
+                        TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "erreur, le nombre de poules ne correspond pas !"; }));
+                        nbPoules = nbPoulesMax;
+                    }
                 }
 
                 else
                 {
                     nbPoules = nbPoules - 1;
+                    if (nbPoules == -1)
+                    {
+                        TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "erreur, le nombre de poules ne correspond pas !"; }));
+                        nbPoules = 0;
+                    }
                 }
-                if(nbPoules == nbPoulesMax + 1)
-                {
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "erreur !"; }));
-                    nbPoules = nbPoulesMax;
-                }
+
+
+              
+               
 
                 Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
             }
