@@ -76,20 +76,18 @@ namespace PoulaillerMaquette.View
 
             if (Topic == "s")
             {
-                if (lastmsg == "rc")
+                if (lastmsg == "dc")
                 {                                      //variable message reçu == "o" pour pouvoir la réutiliser 
-                    lastmsg = "ro";
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "FERMEE"; }));
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "fermeture ..."; }));
+                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte fermée"; }));
                     client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
 
 
                 }
-                else if (lastmsg == "ro")
+                else if (lastmsg == "do")
                 {
-                    lastmsg = "rc";
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "OUVERT"; }));
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ouverture ..."; }));
+                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte ouverte."; }));
                     client.Publish("d", Encoding.UTF8.GetBytes("c"));
 
                 }
@@ -104,6 +102,11 @@ namespace PoulaillerMaquette.View
                 else
                 {
                     nbPoules = nbPoules - 1;
+                }
+                if(nbPoules == nbPoulesMax + 1)
+                {
+                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "erreur !"; }));
+                    nbPoules = nbPoulesMax;
                 }
 
                 Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
@@ -143,7 +146,7 @@ namespace PoulaillerMaquette.View
         }
 
 
-        void sendChienDeGarde() //attention, la syntaxe ne peux pas marcher et je dois revoir mon algo de cette partie, à revoir plus tard !
+        void sendChienDeGarde() 
         {
             TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "en attente ..."; }));
             timer.Start();
@@ -154,7 +157,9 @@ namespace PoulaillerMaquette.View
         {
             if (lastmsg == "r")
             {
-                TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "chien de garde"; }));
+                TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "message reçu par le moteur!"; }));
+
+                /****************************************************** ajout de la gestion de l'ouverture totale *******************************************/
             }
 
             else
