@@ -26,6 +26,7 @@ namespace PoulaillerMaquette.View
         private MyDelegate PassageInfo;
         private System.Timers.Timer timer;
         int nbPoules, nbPoulesMax;
+        private bool confirm = false;
 
 
 
@@ -44,10 +45,12 @@ namespace PoulaillerMaquette.View
             client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "s" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "p" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
             PassageInfo = new MyDelegate(this.MiseAJour);
             lastmsg = "do";
             nbPoulesMax = 3;
             nbPoules = 1;
+            
 
             Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
         }
@@ -136,15 +139,29 @@ namespace PoulaillerMaquette.View
         {
             if (lastmsg == "do")
             {
-                client.Publish("d", Encoding.UTF8.GetBytes("c")); //publie a val sur d que la porte est ouverte
-                etat = "fermer";
+                if(nbPoules != nbPoulesMax)
+                {
+                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\n fermer quand même ?"; }));
+                    BTN_back.Visibility = Visibility.Visible;
+                    BTN_confirm.Visibility = Visibility.Visible;
+
+                    if(confirm == true)
+                    {
+                        client.Publish("d", Encoding.UTF8.GetBytes("c")); //publie a val sur d que la porte est ouverte
+                        etat = "fermer";
+                        sendChienDeGarde();
+                    }
+                }
+
+
             }
             else
             {
                 client.Publish("d", Encoding.UTF8.GetBytes("c"));
                 etat = "ouvrir";
+                sendChienDeGarde();
             }
-            sendChienDeGarde();
+
         }
 
 
@@ -161,6 +178,11 @@ namespace PoulaillerMaquette.View
             timer.Start();
         }
 
+        private void BTN_confirm_click(object sender, RoutedEventArgs e)
+        {
+            confirm = true;
+        }
+        private void BTN_back_click(object sender, RoutedEventArgs e) { }
 
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
@@ -168,7 +190,6 @@ namespace PoulaillerMaquette.View
             {
                 TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "message reçu par le moteur!"; }));
 
-                /****************************************************** ajout de la gestion de l'ouverture totale *******************************************/
             }
 
             else
