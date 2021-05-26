@@ -109,7 +109,9 @@
     </ApplicationDefinition>
     <Compile Include="Class\PoulaillerContext.cs" />
     <Compile Include="Class\Poules.cs" />
+    <Compile Include="DAO\DAOSuivi.cs" />
     <Compile Include="DAO\DAOPoules.cs" />
+    <Compile Include="DAO\testDAO.cs" />
     <Compile Include="View\uc_gest.xaml.cs">
       <DependentUpon>uc_gest.xaml</DependentUpon>
     </Compile>

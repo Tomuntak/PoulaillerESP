@@ -10,6 +10,9 @@ using System.Windows.Controls;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
+
+using PoulaillerMaquette.DAO;
+
 namespace PoulaillerMaquette.View
 {
 
@@ -28,7 +31,7 @@ namespace PoulaillerMaquette.View
         int nbPoules, nbPoulesMax;
         private bool confirm, back = false;
 
-
+        DAOPoules daopoule;
 
         public uc_home()
         {
@@ -49,8 +52,10 @@ namespace PoulaillerMaquette.View
             PassageInfo = new MyDelegate(this.MiseAJour);
             lastmsg = "do";
             nbPoulesMax = 3;
-            nbPoules = 1;
+            nbPoules = daopoule.pouletest();
+            etat = "ouvert";
 
+            daopoule = new DAOPoules();
 
             Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
         }
@@ -83,6 +88,7 @@ namespace PoulaillerMaquette.View
                 {                                      //variable message reçu == "o" pour pouvoir la réutiliser 
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "FERMEE"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte fermée"; }));
+                    etat = "fermer";
                     //client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
 
 
@@ -91,6 +97,7 @@ namespace PoulaillerMaquette.View
                 {
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "OUVERT"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte ouverte."; }));
+                    etat = "ouvert";
                     //client.Publish("d", Encoding.UTF8.GetBytes("c"));
 
                 }
@@ -137,11 +144,11 @@ namespace PoulaillerMaquette.View
 
         void EnvoiPorte()
         {
-            if (lastmsg == "do")
+            if (etat == "ouvert")
             {
                 if(nbPoules != nbPoulesMax)
                 {
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\n fermer quand même ?"; }));
+                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\nfermer quand même ?"; }));
                     BTN_back.Visibility = Visibility.Visible;
                     BTN_confirm.Visibility = Visibility.Visible;
                     nbPouleDiff();
@@ -168,7 +175,7 @@ namespace PoulaillerMaquette.View
                 BTN_back.Visibility = Visibility.Hidden;
                 BTN_confirm.Visibility = Visibility.Hidden;
 
-                client.Publish("d", Encoding.UTF8.GetBytes("c")); //publie a val sur d que la porte est ouverte
+                client.Publish("d", Encoding.UTF8.GetBytes("f")); //publie a val sur d que on force la porte à se fermer
                 sendChienDeGarde();
             }
             else if(back == true)

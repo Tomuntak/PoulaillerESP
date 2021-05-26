@@ -14,18 +14,28 @@ namespace PoulaillerMaquette.DAO
 {
     public class DAOPoules
     {
-        static HttpClient client = new HttpClient();
+        static HttpClient client; 
+
+        public DAOPoules()
+        {
+            client = new HttpClient();
+
+            RunAsync();
+        }
+
+
+       
 
         static async Task RunAsync()
         {
             // Update port # in the following line.
-            client.BaseAddress = new Uri("http://172.31.253.11:64195/api/");
+            client.BaseAddress = new Uri("http://172.31.254.81/api/"); //Attention ! IP pas en static
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        static async Task<Poules> GetPoules()
+        public static async Task<Poules> GetPoules()
         {
             Poules poule = null;
             HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
@@ -34,6 +44,30 @@ namespace PoulaillerMaquette.DAO
                 poule = await response.Content.ReadAsAsync<Poules>();
             }
             return poule;
+        }
+
+
+        public async Task<int> pouletest()
+        {
+            int nbpoule = 0;
+      
+            HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
+            if (response.IsSuccessStatusCode)
+            {
+                //poule = await response.Content.ReadAsAsync<Poules>();
+                var t = await response.Content.ReadAsStringAsync();
+
+                string x = t.Substring(6, 1);
+                nbpoule = int.Parse(x);
+
+                /************************************* autre solution **********************************************/
+                //string[] separator  = t.Split(':');
+                //string x = separator[1].Remove(1,2);
+
+            }
+
+            //int nbpoules = poule.
+            return nbpoule;
         }
 
         /******************************************************************************************** passage par le broker seulement ****************************************************************************************/

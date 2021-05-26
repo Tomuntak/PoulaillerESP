@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PoulaillerMaquette.DAO
 {
-    public class DAOPoules
+    public class DAOSuivi
     {
         static HttpClient client = new HttpClient();
 
@@ -25,52 +25,6 @@ namespace PoulaillerMaquette.DAO
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        static async Task<Poules> GetPoules()
-        {
-            Poules poule = null;
-            HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
-            if (response.IsSuccessStatusCode)
-            {
-                poule = await response.Content.ReadAsAsync<Poules>();
-            }
-            return poule;
-        }
-
-        /******************************************************************************************** passage par le broker seulement ****************************************************************************************/
-
-        //static async Task<Poules> GetPoulesIn()
-        //{
-        //    Poules poule = null;
-        //    HttpResponseMessage response = await client.GetAsync("RecupPouleInside");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        poule = await response.Content.ReadAsAsync<Poules>();
-        //    }
-        //    return poule;
-        //}
-
-        /*********************************************************************************************************************************************************************************************************************/
-
-        static async Task<Uri> CreatePoule(Poules poule)
-        {
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "api/apipoules", poule);
-            response.EnsureSuccessStatusCode();
-
-            // return URI of the created resource.
-            return response.Headers.Location;
-        }
-
-        static async Task<Poules> UpdatePouleAsync(Poules poule)
-        {
-            HttpResponseMessage response = await client.PutAsJsonAsync(
-                $"api/products/{poule.IDPoule}", poule);
-            response.EnsureSuccessStatusCode();
-
-            // Deserialize the updated product from the response body.
-            poule = await response.Content.ReadAsAsync<Poules>();
-            return poule;
-        }
 
     }
 

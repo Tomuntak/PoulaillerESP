@@ -55,7 +55,7 @@
 
             </Grid.Resources>
             <Button Grid.Column="0" Name="BTN_home" Content="home" Click="BTN_home_Click"></Button>
-            <Button Grid.Column="1" Name="BTN_gest" Content="gestion" Click="BTN_gest_Click"></Button>
+            <Button Grid.Column="1" Name="BTN_gest" Content="graphique" Click="BTN_gest_Click"></Button>
             <Button Grid.Column="2" Name="BTN_cfg" Content="configuration" Click="BTN_cfg_Click" Cursor="Hand"></Button>
             <Button Grid.Column="3" Name="BTN_info" Content="informations " Click="BTN_info_Click"></Button>
         </Grid>
