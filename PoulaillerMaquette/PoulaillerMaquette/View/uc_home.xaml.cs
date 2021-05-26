@@ -26,7 +26,7 @@ namespace PoulaillerMaquette.View
         private MyDelegate PassageInfo;
         private System.Timers.Timer timer;
         int nbPoules, nbPoulesMax;
-        private bool confirm = false;
+        private bool confirm, back = false;
 
 
 
@@ -50,7 +50,7 @@ namespace PoulaillerMaquette.View
             lastmsg = "do";
             nbPoulesMax = 3;
             nbPoules = 1;
-            
+
 
             Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
         }
@@ -83,7 +83,7 @@ namespace PoulaillerMaquette.View
                 {                                      //variable message reçu == "o" pour pouvoir la réutiliser 
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "FERMEE"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte fermée"; }));
-                    client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
+                    //client.Publish("d", Encoding.UTF8.GetBytes("o")); //publie a val sur d que la porte est ouverte
 
 
                 }
@@ -91,7 +91,7 @@ namespace PoulaillerMaquette.View
                 {
                     Lbl_porte.Dispatcher.Invoke(new Action(() => { Lbl_porte.Content = "OUVERT"; }));
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte ouverte."; }));
-                    client.Publish("d", Encoding.UTF8.GetBytes("c"));
+                    //client.Publish("d", Encoding.UTF8.GetBytes("c"));
 
                 }
             }
@@ -144,24 +144,40 @@ namespace PoulaillerMaquette.View
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\n fermer quand même ?"; }));
                     BTN_back.Visibility = Visibility.Visible;
                     BTN_confirm.Visibility = Visibility.Visible;
-
-                    if(confirm == true)
-                    {
-                        client.Publish("d", Encoding.UTF8.GetBytes("c")); //publie a val sur d que la porte est ouverte
-                        etat = "fermer";
-                        sendChienDeGarde();
-                    }
+                    nbPouleDiff();
                 }
-
 
             }
             else
             {
-                client.Publish("d", Encoding.UTF8.GetBytes("c"));
+                client.Publish("d", Encoding.UTF8.GetBytes("o"));
                 etat = "ouvrir";
                 sendChienDeGarde();
             }
 
+        }
+
+        void nbPouleDiff()
+        {
+           
+
+            if (confirm == true)
+            {
+                etat = "fermer";
+                confirm = false;
+                BTN_back.Visibility = Visibility.Hidden;
+                BTN_confirm.Visibility = Visibility.Hidden;
+
+                client.Publish("d", Encoding.UTF8.GetBytes("c")); //publie a val sur d que la porte est ouverte
+                sendChienDeGarde();
+            }
+            else if(back == true)
+            {
+                back = false;
+                BTN_back.Visibility = Visibility.Hidden;
+                BTN_confirm.Visibility = Visibility.Hidden;
+                TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "La porte reste ouverte en attendant les poules."; }));
+            }
         }
 
 
@@ -181,8 +197,18 @@ namespace PoulaillerMaquette.View
         private void BTN_confirm_click(object sender, RoutedEventArgs e)
         {
             confirm = true;
+            BTN_back.Visibility = Visibility.Hidden;
+            BTN_confirm.Visibility = Visibility.Hidden;
+            nbPouleDiff();
         }
-        private void BTN_back_click(object sender, RoutedEventArgs e) { }
+
+        private void BTN_back_click(object sender, RoutedEventArgs e) 
+        {
+            back = true;
+            BTN_back.Visibility = Visibility.Hidden;
+            BTN_confirm.Visibility = Visibility.Hidden;
+            nbPouleDiff();
+        }
 
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
