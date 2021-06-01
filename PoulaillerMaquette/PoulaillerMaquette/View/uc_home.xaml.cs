@@ -36,6 +36,7 @@ namespace PoulaillerMaquette.View
         public uc_home()
         {
             InitializeComponent();
+            daopoule = new DAOPoules();
             client = new MqttClient(IPAddress.Parse("172.31.253.11")); //172.31.253.6 - 172.31.253.11 - 192.168.1.43 --> premiere = nathan / 2e = val / 3e = yvoire
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
@@ -51,11 +52,14 @@ namespace PoulaillerMaquette.View
 
             PassageInfo = new MyDelegate(this.MiseAJour);
             lastmsg = "do";
+            //Task<int> tt = daopoule.GetPouleActive();
+            //int x = await tt;
+
             nbPoulesMax = 3;
-            nbPoules = daopoule.pouletest();
+
+           nbPoules = 0;
             etat = "ouvert";
 
-            daopoule = new DAOPoules();
 
             Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
         }

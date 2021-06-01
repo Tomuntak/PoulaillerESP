@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using PoulaillerMaquette.DAO;
+
 namespace PoulaillerMaquette.View
 {
     /// <summary>
@@ -20,14 +22,18 @@ namespace PoulaillerMaquette.View
     /// </summary>
     public partial class uc_config : UserControl
     {
+        DAOPoules daopoule;
+
         public uc_config()
         {
             InitializeComponent();
+            daopoule = new DAOPoules();
+
         }
 
         private void BTN_AddPoule_Click(object sender, RoutedEventArgs e)
         {
-
+            //daopoule.CreatePoule();
         }
 
         private void BTN_ConfPoule_Click(object sender, RoutedEventArgs e)

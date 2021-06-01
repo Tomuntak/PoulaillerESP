@@ -14,7 +14,8 @@ namespace PoulaillerMaquette.DAO
 {
     public class DAOPoules
     {
-        static HttpClient client; 
+        HttpClient client;
+
 
         public DAOPoules()
         {
@@ -26,30 +27,31 @@ namespace PoulaillerMaquette.DAO
 
        
 
-        static async Task RunAsync()
+        void RunAsync()
         {
             // Update port # in the following line.
-            client.BaseAddress = new Uri("http://172.31.254.81/api/"); //Attention ! IP pas en static
+            client.BaseAddress = new Uri("http://172.31.254.111/api/"); //Attention ! IP pas en static
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static async Task<Poules> GetPoules()
-        {
-            Poules poule = null;
-            HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
-            if (response.IsSuccessStatusCode)
-            {
-                poule = await response.Content.ReadAsAsync<Poules>();
-            }
-            return poule;
-        }
+        /********************************** get poule pour le graphique par poules individuellement **************************/
+        //public async Task<Poules> GetPoules()
+        //{
+        //    Poules poule = null;
+        //    HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        poule = await response.Content.ReadAsAsync<Poules>();
+        //    }
+        //    return poule;
+        //}
 
 
-        public async Task<int> pouletest()
+        public async Task<int> GetPouleActive()
         {
-            int nbpoule = 0;
+             int nbpouleactive = 0;
       
             HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
             if (response.IsSuccessStatusCode)
@@ -58,34 +60,18 @@ namespace PoulaillerMaquette.DAO
                 var t = await response.Content.ReadAsStringAsync();
 
                 string x = t.Substring(6, 1);
-                nbpoule = int.Parse(x);
+                nbpouleactive = int.Parse(x);
 
                 /************************************* autre solution **********************************************/
                 //string[] separator  = t.Split(':');
                 //string x = separator[1].Remove(1,2);
 
             }
-
-            //int nbpoules = poule.
-            return nbpoule;
+            return nbpouleactive;
         }
 
-        /******************************************************************************************** passage par le broker seulement ****************************************************************************************/
 
-        //static async Task<Poules> GetPoulesIn()
-        //{
-        //    Poules poule = null;
-        //    HttpResponseMessage response = await client.GetAsync("RecupPouleInside");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        poule = await response.Content.ReadAsAsync<Poules>();
-        //    }
-        //    return poule;
-        //}
-
-        /*********************************************************************************************************************************************************************************************************************/
-
-        static async Task<Uri> CreatePoule(Poules poule)
+        public async Task<Uri> CreatePoule(Poules poule)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync(
                 "api/apipoules", poule);
@@ -95,7 +81,7 @@ namespace PoulaillerMaquette.DAO
             return response.Headers.Location;
         }
 
-        static async Task<Poules> UpdatePouleAsync(Poules poule)
+        async Task<Poules> UpdatePouleAsync(Poules poule)
         {
             HttpResponseMessage response = await client.PutAsJsonAsync(
                 $"api/products/{poule.IDPoule}", poule);
