@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
+using PoulaillerMaquette.View;
+
 
 
 namespace PoulaillerMaquette.DAO
@@ -15,12 +17,13 @@ namespace PoulaillerMaquette.DAO
     public class DAOPoules
     {
         HttpClient client;
+        uc_home fenetre;
 
 
-        public DAOPoules()
+        public DAOPoules(uc_home fen)
         {
             client = new HttpClient();
-
+            fenetre = fen;
             RunAsync();
         }
 
@@ -30,7 +33,7 @@ namespace PoulaillerMaquette.DAO
         void RunAsync()
         {
             // Update port # in the following line.
-            client.BaseAddress = new Uri("http://172.31.254.111/api/"); //Attention ! IP pas en static
+            client.BaseAddress = new Uri("http://172.31.253.16/api/"); //Attention ! IP pas en static
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -49,10 +52,10 @@ namespace PoulaillerMaquette.DAO
         //}
 
 
-        public async Task<int> GetPouleActive()
+        public async void GetPouleActive()
         {
-             int nbpouleactive = 0;
-      
+            int nbpouleactive = 0;
+
             HttpResponseMessage response = await client.GetAsync("RecupPouleActive");
             if (response.IsSuccessStatusCode)
             {
@@ -66,8 +69,9 @@ namespace PoulaillerMaquette.DAO
                 //string[] separator  = t.Split(':');
                 //string x = separator[1].Remove(1,2);
 
+                fenetre.nbPoulesMax = nbpouleactive;
+                fenetre.Lbl_porte.Dispatcher.Invoke(new Action(() => { fenetre.TB_NbPoule.Content = fenetre.nbPoules + "/" + nbpouleactive; }));
             }
-            return nbpouleactive;
         }
 
 

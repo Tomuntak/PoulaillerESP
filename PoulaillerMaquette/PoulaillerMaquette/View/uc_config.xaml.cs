@@ -22,12 +22,12 @@ namespace PoulaillerMaquette.View
     /// </summary>
     public partial class uc_config : UserControl
     {
-        DAOPoules daopoule;
+        //DAOPoules daopoule;
 
         public uc_config()
         {
             InitializeComponent();
-            daopoule = new DAOPoules();
+            //daopoule = new DAOPoules();
 
         }
 

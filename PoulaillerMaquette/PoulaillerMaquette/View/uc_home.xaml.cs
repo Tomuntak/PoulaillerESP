@@ -28,40 +28,41 @@ namespace PoulaillerMaquette.View
         string Topic;
         private MyDelegate PassageInfo;
         private System.Timers.Timer timer;
-        int nbPoules, nbPoulesMax;
+        public int nbPoules, nbPoulesMax;
         private bool confirm, back = false;
+
+
 
         DAOPoules daopoule;
 
         public uc_home()
         {
             InitializeComponent();
-            daopoule = new DAOPoules();
+            daopoule = new DAOPoules(this);
+
+
             client = new MqttClient(IPAddress.Parse("172.31.253.11")); //172.31.253.6 - 172.31.253.11 - 192.168.1.43 --> premiere = nathan / 2e = val / 3e = yvoire
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.MqttMsgSubscribed += client_MqttMsgSubscribed;
-
-            timer = new System.Timers.Timer(3000);
-            timer.Elapsed += OnTimedEvent;
-            timer.AutoReset = false;
 
             client.Connect(Guid.NewGuid().ToString());
             client.Subscribe(new string[] { "d" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "s" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             client.Subscribe(new string[] { "p" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
+            timer = new System.Timers.Timer(3000);
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = false;
+
             PassageInfo = new MyDelegate(this.MiseAJour);
-            lastmsg = "do";
-            //Task<int> tt = daopoule.GetPouleActive();
-            //int x = await tt;
 
-            nbPoulesMax = 3;
+            RecupInfos();
+            daopoule.GetPouleActive();
 
-           nbPoules = 0;
-            etat = "ouvert";
+            //TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "L'application s'est lancée.\r\nIl y a " + nbPoules + " poules dans le poulailler.\r\nIl y a " + nbPoulesMax + " poules au maximum.\r\nLa porte est actuellement " + etat; }));
 
 
-            Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
+
         }
 
 
@@ -103,8 +104,8 @@ namespace PoulaillerMaquette.View
                     TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "porte ouverte."; }));
                     etat = "ouvert";
                     //client.Publish("d", Encoding.UTF8.GetBytes("c"));
-
                 }
+
             }
             else if (Topic == "p")
             {
@@ -118,7 +119,7 @@ namespace PoulaillerMaquette.View
                     }
                 }
 
-                else
+                else if(lastmsg == "s")
                 {
                     nbPoules = nbPoules - 1;
                     if (nbPoules == -1)
@@ -128,9 +129,12 @@ namespace PoulaillerMaquette.View
                     }
                 }
 
+                else if (lastmsg == "0" || lastmsg == "1" || lastmsg == "2" || lastmsg == "3" || lastmsg == "4")
+                {
+                    nbPoules = int.Parse(lastmsg);
+                }
 
-              
-               
+
 
                 Lbl_porte.Dispatcher.Invoke(new Action(() => { TB_NbPoule.Content = nbPoules + "/" + nbPoulesMax; }));
             }
@@ -192,7 +196,6 @@ namespace PoulaillerMaquette.View
         }
 
 
-
         void MiseAJour(string t)
         {
             TB_sub.Text = t;
@@ -238,5 +241,12 @@ namespace PoulaillerMaquette.View
                 //    }
             }
         }
+
+        public void RecupInfos()
+        {
+            client.Publish("s", Encoding.UTF8.GetBytes("de"));
+
+            client.Publish("s", Encoding.UTF8.GetBytes("pe"));
+         }
     }
 }
