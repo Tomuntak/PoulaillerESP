@@ -156,7 +156,8 @@ namespace PoulaillerMaquette.View
             {
                 if(nbPoules != nbPoulesMax)
                 {
-                    TB_sub.Dispatcher.Invoke(new Action(() => { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\nfermer quand même ?"; }));
+                    TB_sub.Dispatcher.Invoke(new Action(() => 
+                    { TB_sub.Text = "ATTENTION ! Toutes les poules ne sont pas rentrées, \r\nfermer quand même ?"; }));
                     BTN_back.Visibility = Visibility.Visible;
                     BTN_confirm.Visibility = Visibility.Visible;
                     nbPouleDiff();
@@ -208,22 +209,6 @@ namespace PoulaillerMaquette.View
             timer.Start();
         }
 
-        private void BTN_confirm_click(object sender, RoutedEventArgs e)
-        {
-            confirm = true;
-            BTN_back.Visibility = Visibility.Hidden;
-            BTN_confirm.Visibility = Visibility.Hidden;
-            nbPouleDiff();
-        }
-
-        private void BTN_back_click(object sender, RoutedEventArgs e) 
-        {
-            back = true;
-            BTN_back.Visibility = Visibility.Hidden;
-            BTN_confirm.Visibility = Visibility.Hidden;
-            nbPouleDiff();
-        }
-
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             if (lastmsg == "r")
@@ -241,6 +226,24 @@ namespace PoulaillerMaquette.View
                 //    }
             }
         }
+
+        private void BTN_confirm_click(object sender, RoutedEventArgs e)
+        {
+            confirm = true;
+            BTN_back.Visibility = Visibility.Hidden;
+            BTN_confirm.Visibility = Visibility.Hidden;
+            nbPouleDiff();
+        }
+
+        private void BTN_back_click(object sender, RoutedEventArgs e) 
+        {
+            back = true;
+            BTN_back.Visibility = Visibility.Hidden;
+            BTN_confirm.Visibility = Visibility.Hidden;
+            nbPouleDiff();
+        }
+
+
 
         public void RecupInfos()
         {
